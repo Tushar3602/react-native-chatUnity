@@ -142,11 +142,8 @@ const ChatMessages = () => {
           contentContainerStyle={{ padding: 10 }}
         >
           {messages.map((message) => {
+            const isSelectedForDelete = selectedMessages.includes(message._id);
             if (message.messageType === 'text') {
-              const isSelectedForDelete = selectedMessages.includes(
-                message._id
-              );
-
               return (
                 <TouchableOpacity
                   key={message._id}
@@ -176,11 +173,19 @@ const ChatMessages = () => {
               return (
                 <TouchableOpacity
                   key={message._id}
-                  style={
+                  style={[
                     message.receiverId === id
                       ? styles.senderMessage
-                      : styles.receiverMessage
-                  }
+                      : styles.receiverMessage,
+                    isSelectedForDelete && {
+                      backgroundColor: '#F0FFFF',
+                    },
+                  ]}
+                  onLongPress={() => {
+                    if (message.receiverId === id) {
+                      handleSelectMessage(message._id);
+                    }
+                  }}
                 >
                   <Image
                     source={{ uri: message.message }}

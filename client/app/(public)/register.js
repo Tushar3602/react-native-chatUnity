@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
-  Button,
   ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -115,26 +114,30 @@ const Register = () => {
             )}
           </TouchableOpacity>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 15,
-            }}
-          >
-            <Text style={{ letterSpacing: 1 }}>Already have an account ? </Text>
-            <TouchableOpacity onPress={() => router.push('login')}>
-              <Text
-                style={{
-                  color: Colors.primary,
-                  letterSpacing: 1,
-                  fontWeight: 'bold',
-                }}
-              >
-                Login
+          {!isLoading && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 15,
+              }}
+            >
+              <Text style={{ letterSpacing: 1 }}>
+                Already have an account ?{' '}
               </Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity onPress={() => router.push('login')}>
+                <Text
+                  style={{
+                    color: Colors.primary,
+                    letterSpacing: 1,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Login
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

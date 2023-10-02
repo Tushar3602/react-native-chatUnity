@@ -4,15 +4,17 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { User } from '../../../components';
 import Colors from '../../../constants/Colors';
-// import { Toast } from '../../../components';
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
 
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
+      const response = await customFetch('/users/current-user');
+      setCurrentUser(response.data.user);
       const { data } = await customFetch('/users/get-all-users');
       setUsers(data.users);
     } catch (error) {
@@ -40,7 +42,15 @@ const Home = () => {
     <View style={{ flex: 1, backgroundColor: Colors.secondary }}>
       <View>
         {users.map((user) => {
-          return <User key={user._id} {...user} />;
+          if (user._id === currentUser._id) return;
+          return (
+            <User
+              key={user._id}
+              {...user}
+              fetchUsers={fetchUsers}
+              currentUser={currentUser}
+            />
+          );
         })}
       </View>
     </View>

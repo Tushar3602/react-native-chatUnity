@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, View, Alert } from 'react-native';
 import React from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from '../../components';
+import { customFetch } from '../../utils/customFetch';
 
 const Layout = () => {
   const router = useRouter();
@@ -16,6 +17,36 @@ const Layout = () => {
     setTimeout(() => {
       router.replace('/login');
     }, 1000);
+  };
+
+  const handleDeleteUser = () => {
+    Alert.alert(
+      'Are you sure you want to delete your account permanently?',
+      '',
+      [
+        {
+          text: 'No',
+          onPress: () => null,
+        },
+        {
+          text: 'Yes',
+          onPress: async () => {
+            try {
+              await customFetch.delete('/users/delete-user-profile');
+              Toast('User deleted successfully!');
+              setTimeout(() => {
+                router.replace('/login');
+              }, 1000);
+            } catch (error) {
+              const errorMessage =
+                error?.response?.data?.msg || 'Something went wrong';
+              console.log('error', errorMessage);
+              Toast(errorMessage);
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -54,9 +85,18 @@ const Layout = () => {
           ),
           headerRight: () => {
             return (
-              <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
-                <Text style={styles.logoutBtnText}>Logout</Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity style={styles.btn} onPress={logout}>
+                  <Text style={styles.btnText}>Logout</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.btn, { backgroundColor: '#C61541' }]}
+                  onPress={handleDeleteUser}
+                >
+                  <Text style={styles.btnText}>Delete Profile</Text>
+                </TouchableOpacity>
+              </View>
             );
           },
           headerTitleStyle: {
@@ -73,13 +113,13 @@ const Layout = () => {
 };
 
 const styles = StyleSheet.create({
-  logoutBtn: {
-    marginRight: 20,
+  btn: {
+    marginRight: 10,
     padding: 10,
     borderRadius: 3,
-    backgroundColor: '#C61541',
+    backgroundColor: '#AECBF6',
   },
-  logoutBtnText: {
+  btnText: {
     letterSpacing: 1,
     color: '#fff',
     fontWeight: 'bold',

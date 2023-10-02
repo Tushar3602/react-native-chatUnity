@@ -99,27 +99,28 @@ const Login = () => {
             )}
           </TouchableOpacity>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 15,
-            }}
-          >
-            <Text style={{ letterSpacing: 1 }}>Don't have an account ? </Text>
-            <TouchableOpacity>
-              <Text
-                style={{
-                  color: Colors.primary,
-                  letterSpacing: 1,
-                  fontWeight: 'bold',
-                }}
-                onPress={() => router.push('register')}
-              >
-                Register
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {!isLoading && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 15,
+              }}
+            >
+              <Text style={{ letterSpacing: 1 }}>Don't have an account ? </Text>
+              <TouchableOpacity onPress={() => router.push('register')}>
+                <Text
+                  style={{
+                    color: Colors.primary,
+                    letterSpacing: 1,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Register
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
